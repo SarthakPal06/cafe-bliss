@@ -1,0 +1,27 @@
+.payment-container {
+  text-align: center;
+  padding: 40px;
+}
+.user-summary {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 8px;
+  margin: 20px auto;
+  width: 60%;
+}
+.payment-options {
+  margin-top: 20px;
+}
+.payment-options label {
+  display: block;
+  margin: 10px 0;
+}
+.pay-btn {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: green;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
