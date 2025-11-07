@@ -5,18 +5,50 @@ import "./Payment.css";
 const Payment = () => {
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userDetails") || "{}");
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   const [method, setMethod] = useState("");
 
-  const handlePayment = () => {
+  const handlePayment = async () => {
     if (!method) {
       alert("Please select a payment method!");
       return;
     }
 
-    setTimeout(() => {
-      localStorage.removeItem("cart");
-      navigate("/order-success");
-    }, 1000);
+    // 🧾 Create final order data
+    const orderData = {
+      user,
+      cart,
+      paymentMethod: method,
+      totalAmount: cart.reduce((sum, item) => sum + item.price * (item.quantity || 1), 0),
+      date: new Date().toISOString(),
+    };
+
+    try {
+      // 🌐 Send order to backend
+      const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      const response = await fetch(`${API_BASE_URL}/api/order`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log("Order saved:", result);
+
+        // ✅ Clear cart after successful order
+        localStorage.removeItem("cart");
+        localStorage.removeItem("userDetails");
+
+        // 🟢 Navigate to success page
+        navigate("/order-success");
+      } else {
+        alert("Failed to place order. Please try again!");
+      }
+    } catch (error) {
+      console.error("Error placing order:", error);
+      alert("Server error! Please check backend connection.");
+    }
   };
 
   return (

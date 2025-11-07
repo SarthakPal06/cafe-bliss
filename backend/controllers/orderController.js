@@ -1,24 +1,22 @@
-const Order = require("../models/orderModel");
+import Order from "../models/orderModel.js";
 
-// Create new order
-const createOrder = async (req, res) => {
+export const createOrder = async (req, res) => {
   try {
-    const order = new Order(req.body);
-    const savedOrder = await order.save();
+    const newOrder = new Order(req.body);
+    const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
-  } catch (err) {
-    res.status(500).json({ message: "Error saving order", error: err });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Get all orders
-const getOrders = async (req, res) => {
+export const getOrders = async (req, res) => {
   try {
-    const orders = await Order.find().sort({ orderDate: -1 });
+    const orders = await Order.find();
     res.status(200).json(orders);
-  } catch (err) {
-    res.status(500).json({ message: "Error fetching orders", error: err });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 
-module.exports = { createOrder, getOrders };
+
