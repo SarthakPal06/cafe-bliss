@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  labels:
+    app: cafe-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cafe-backend
+  template:
+    metadata:
+      labels:
+        app: cafe-backend
+    spec:
+      containers:
+        - name: cafe-backend
+          image: thedarkmental06/cafe-backend:v7
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+            - name: MONGO_URI
+              value: "mongodb://admin:password@mongo-service:27017/cafeDB?authSource=admin"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: NodePort
+  selector:
+    app: cafe-backend
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+      nodePort: 30008   # You can change this (range: 30000–32767)

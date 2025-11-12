@@ -11,6 +11,7 @@ import UserDetails from "./pages/UserDetails";
 import Payment from "./pages/Payment";
 import OrderSuccess from "./pages/OrderSuccess";
 import Contact from "./pages/Contact";
+import AdminOrders from "./pages/AdminOrders";
 import "./App.css";
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact/>} />
+        <Route path="/admin/orders" element={<AdminOrders />} />
       </Routes>
       <Footer />
     </>

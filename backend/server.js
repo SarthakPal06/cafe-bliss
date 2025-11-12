@@ -1,31 +1,30 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import mongoose from "mongoose";
-import orderRoutes from "./routes/orders.js"; // ✅ correct plural file
-import connectDB from "./config/db.js"; // ✅ connect MongoDB
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const orderRoutes = require("./routes/orders");
+const connectDB = require("./config/db");
 
 dotenv.config();
-connectDB(); // connect MongoDB
+connectDB();
 
 const app = express();
 
-// ✅ CORS setup
+// ✅ CORS setup for Kubernetes / any frontend origin
 app.use(
   cors({
-    origin: "http://localhost:3000", // frontend origin
+    origin: "*", // Kubernetes me frontend ka NodePort alag ho sakta hai, sab allow kar diya
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
   })
 );
 
 // ✅ Parse JSON body
 app.use(express.json());
 
-// ✅ Use your order routes
-app.use("/api/orders", orderRoutes); // ✅ this must match frontend fetch URL
+// ✅ Use order routes
+app.use("/api/orders", orderRoutes);
 
-// ✅ Default route (optional)
+// ✅ Default route
 app.get("/", (req, res) => {
   res.send("✅ Backend is running...");
 });
@@ -35,4 +34,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
-

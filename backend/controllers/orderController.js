@@ -1,6 +1,6 @@
-import Order from "../models/orderModel.js";
+const Order = require("../models/orderModel");
 
-export const createOrder = async (req, res) => {
+const createOrder = async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     const savedOrder = await newOrder.save();
@@ -10,7 +10,7 @@ export const createOrder = async (req, res) => {
   }
 };
 
-export const getOrders = async (req, res) => {
+const getOrders = async (req, res) => {
   try {
     const orders = await Order.find();
     res.status(200).json(orders);
@@ -18,5 +18,8 @@ export const getOrders = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+module.exports = { createOrder, getOrders };
+
 
 
